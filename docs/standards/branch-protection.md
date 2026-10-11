@@ -22,7 +22,7 @@ bypass for anyone:
 | Block force pushes | history on `main` cannot be rewritten |
 | Require linear history | no merge commits; squash only |
 | Require a pull request | no direct pushes; conversations must be resolved; approvals are dismissed when new commits arrive |
-| Require status checks | `Format`, `Lint and test (Linux)`, `Lint (Windows)` and `Dependencies` must pass, on a branch that is up to date with `main` |
+| Require status checks | `Format`, `Lint and test (Linux)`, `Lint (Windows)`, `Check (local inference)` and `Dependencies` must pass, on a branch that is up to date with `main` |
 
 **`main: review`** (`.github/rulesets/main-review.json`):
 

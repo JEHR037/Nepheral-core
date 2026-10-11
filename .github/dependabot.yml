@@ -15,6 +15,11 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      # llama-cpp-2 changes its API between patch releases (0.1.159 moved the
+      # token functions off LlamaModel), so it is upgraded by hand together
+      # with the code that calls it.
+      - dependency-name: "llama-cpp-2"
+      - dependency-name: "llama-cpp-sys-2"
     commit-message:
       prefix: build
       include: scope
