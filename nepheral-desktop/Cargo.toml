@@ -1,0 +1,75 @@
+[package]
+name = "nepheral-desktop"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Nepheral desktop client — Tauri webview shell over the shared client-node runtime"
+publish = false
+
+[lib]
+name = "nepheral_desktop"
+path = "src/lib.rs"
+
+[[bin]]
+name = "nepheral-desktop"
+path = "src/main.rs"
+
+[features]
+# In-process llama-cpp inference is the default (CPU backend) — otherwise
+# a model downloaded from the catalog is never actually read by the
+# engine, which only falls back to an external Ollama-compatible backend.
+# Pick exactly one of cpu/vulkan/cuda (--no-default-features --features
+# vulkan, say) — they all pull in llama-cpp-2 and aren't meant to be
+# combined. cpu needs cmake + clang/LLVM on the host; vulkan needs the
+# Vulkan SDK; cuda needs the CUDA toolkit (NVIDIA GPU only).
+default = ["cpu"]
+cpu    = ["app-kernel/client-cpu"]
+vulkan = ["app-kernel/client-vulkan"]
+cuda   = ["app-kernel/client-cuda"]
+# One binary, runtime GPU detection (NVIDIA via CUDA or AMD/Intel via Vulkan,
+# falling back to CPU) instead of picking a backend at build time — build with
+# --no-default-features --features gpu-auto. Needs both the CUDA toolkit and
+# the Vulkan SDK on the build host, so it stays opt-in rather than the
+# default. The backends/ directory produced alongside the build output must
+# be shipped next to the executable (see local_backend.rs's shared_backend()).
+gpu-auto = ["app-kernel/client-gpu-auto"]
+
+[dependencies]
+app-kernel = { path = "../app-kernel", default-features = false, features = ["client"] }
+nepheral-api = { path = "../nepheral-api" }
+core-crypto = { path = "../core-crypto" }
+ai-engine = { path = "../ai-engine" }
+mesh-network = { path = "../mesh-network" }
+utils = { path = "../utils" }
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+futures.workspace = true
+hex.workspace = true
+zeroize.workspace = true
+rand.workspace = true
+# The TPM-sealed node store (tpm.rs): the data under a key the TPM wraps.
+chacha20poly1305.workspace = true
+ed25519-dalek.workspace = true
+
+# Desktop installs update themselves; phones update through their own
+# download.
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
+
+# The node key on Android is sealed by the Keystore, reached over JNI.
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"
+ndk-context = "0.1"
+
+[target.'cfg(windows)'.dependencies]
+# DPAPI seals the node store to this user's login (node_store.rs).
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_Security_Cryptography"] }
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }

@@ -1,0 +1,33 @@
+[package]
+name = "mesh-network"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "QUIC-based mesh network transport for fragment delivery"
+publish = false
+
+[dependencies]
+quinn.workspace = true
+tokio.workspace = true
+zeroize.workspace = true
+tracing.workspace = true
+core-crypto = { path = "../core-crypto" }
+ed25519-dalek.workspace = true
+chacha20poly1305.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rustls = { version = "0.23", default-features = false, features = ["ring"] }
+hex.workspace = true
+rand.workspace = true
+sha2.workspace = true
+# Needed to set IPV6_V6ONLY on the IPv6 listener before quinn takes the
+# socket. quinn's Endpoint::server() binds with OS defaults, and those
+# differ: Windows leaves v6-only on, most Linux distros turn it off. Without
+# pinning it we would get a dual-stack socket on Linux and a v6-only one on
+# Windows from identical code.
+socket2 = "0.5"
+
+[dev-dependencies]
+rcgen = "0.12"
+tokio = { workspace = true, features = ["macros","rt-multi-thread"] }

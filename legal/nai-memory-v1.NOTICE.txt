@@ -1,0 +1,14 @@
+nai-memory-v1.safetensors — the model behind NAI's private memory in Nepheral
+
+Based on Granite Embedding 107M Multilingual
+(https://huggingface.co/ibm-granite/granite-embedding-107m-multilingual),
+Copyright IBM Corp., licensed under the Apache License, Version 2.0; the
+full text is in Apache-2.0.txt, distributed with this file.
+
+Modified by Nepheral (2026-10-04): the word-embedding table is stored as
+8-bit integers with one scale per row, and the tokenizer and configuration
+are stored inside the same file. The other weights are as published. The
+tool that makes it is recall/examples/pack.rs in Nepheral's source.
+
+This file is distributed under the Apache License, Version 2.0, not under
+Nepheral's own licence (BUSL-1.1). IBM does not endorse Nepheral.

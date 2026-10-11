@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Unlock and main windows: core IPC (invoke + events) only",
+  "windows": ["unlock", "main"],
+  "permissions": ["core:default"]
+}

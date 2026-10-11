@@ -1,0 +1,12 @@
+# Who reviews what. GitHub requests a review from the owners of the files a
+# pull request touches.
+
+# Default owner.
+*                       @JEHR037
+
+# Consensus-critical code, wire protocol and the security policy.
+/core-crypto/           @JEHR037
+/mesh-network/          @JEHR037
+/SECURITY.md            @JEHR037
+/LICENSE                @JEHR037
+/.github/               @JEHR037

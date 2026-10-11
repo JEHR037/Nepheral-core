@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nepheral</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="unlock-body">
+<div class="unlock-wrap">
+  <div class="unlock-brand">
+    <div class="brand">◇ Nepheral</div>
+    <button class="chip" id="lang-toggle" style="cursor:pointer"></button>
+  </div>
+
+  <div class="card unlock-card" id="u-card">
+    <h3 id="u-title"></h3>
+    <div class="hint" id="u-lead"></div>
+
+    <!-- password entry: unlock, create, migrate, restore -->
+    <div id="u-form" class="unlock-form">
+      <textarea id="u-phrase" rows="4" class="mono" spellcheck="false" autocomplete="off" style="display:none"></textarea>
+      <input id="u-pass" type="password" autocomplete="current-password">
+      <input id="u-pass2" type="password" autocomplete="new-password" style="display:none">
+      <div class="strength" id="u-strength" style="display:none"><div></div></div>
+      <button class="btn xl" id="u-go"></button>
+      <div class="hint bad" id="u-err"></div>
+      <div class="unlock-links">
+        <button class="linklike" id="u-alt"></button>
+      </div>
+    </div>
+
+    <!-- the recovery phrase, shown once after a vault is created -->
+    <div id="u-show" style="display:none" class="unlock-form">
+      <div class="callout warn" data-i18n="v.phraseWarn"></div>
+      <div class="mnemonic" id="u-words"></div>
+      <div class="unlock-links"><button class="linklike" id="u-pdf-open" data-i18n="v.pdf.open"></button></div>
+      <label class="row hint"><input type="checkbox" id="u-saved"> <span data-i18n="v.phraseSaved"></span></label>
+      <button class="btn xl" id="u-enter" disabled data-i18n="v.enter"></button>
+    </div>
+
+    <!-- optional: the phrase as a PDF under its own password; paper first -->
+    <div id="u-pdf" style="display:none" class="unlock-form">
+      <div class="callout warn" data-i18n="v.pdf.lead"></div>
+      <input id="u-pdf-pass" type="password" autocomplete="new-password" data-i18n-ph="v.pdf.pass">
+      <input id="u-pdf-pass2" type="password" autocomplete="new-password" data-i18n-ph="v.confirm">
+      <button class="btn xl" id="u-pdf-go" data-i18n="v.pdf.save"></button>
+      <div class="hint" id="u-pdf-msg"></div>
+      <div class="unlock-links"><button class="linklike" id="u-pdf-back" data-i18n="v.pdf.back"></button></div>
+    </div>
+
+    <div id="u-wait" class="row hint" style="display:none"><span class="spinner"></span> <span id="u-wait-text"></span></div>
+  </div>
+
+  <div class="hint unlock-foot" data-i18n="v.foot"></div>
+</div>
+<script src="i18n-mobile.js"></script>
+<script src="i18n.js"></script>
+<script src="unlock.js"></script>
+</body>
+</html>

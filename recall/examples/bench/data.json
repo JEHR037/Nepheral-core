@@ -1,0 +1,495 @@
+{
+ "conversations": [
+  {
+   "name": "es-mixed",
+   "turns": [
+    "Quiero hacer pan de masa madre en casa, ¿cómo empiezo la masa madre desde cero?",
+    "Mezcla 50 g de harina integral con 50 g de agua tibia en un frasco. Cada 24 horas descarta la mitad y alimenta con la misma cantidad de harina y agua. En 5 a 7 días debería burbujear y doblar su volumen.",
+    "¿Cómo ordeno una lista de diccionarios por una clave en Python?",
+    "Usa sorted(lista, key=lambda d: d['edad']). Si quieres orden descendente añade reverse=True, y si la clave puede faltar usa d.get('edad', 0).",
+    "Me voy a Lisboa en noviembre, ¿qué barrios me recomiendas para alojarme?",
+    "Alfama si buscas ambiente tradicional y fado, Baixa o Chiado para estar céntrico, y Príncipe Real si prefieres algo tranquilo con buenos restaurantes.",
+    "¿Cuál es la diferencia entre un ETF y un fondo indexado?",
+    "Ambos replican un índice. El ETF cotiza en bolsa durante el día como una acción; el fondo indexado se compra al valor liquidativo de cierre. Las comisiones suelen ser parecidas.",
+    "Vuelvo al pan: ¿a qué temperatura y cuánto tiempo horneo la hogaza?",
+    "Precalienta el horno a 250 °C con la olla de hierro dentro. Hornea 20 minutos tapado y 20 a 25 minutos destapado a 230 °C hasta que la corteza esté bien dorada.",
+    "¿Qué hora es buena para ver el atardecer en Lisboa en noviembre?",
+    "En noviembre el sol se pone hacia las 17:20. El Miradouro de Santa Catarina o el de Senhora do Monte son los mejores sitios."
+   ],
+   "probes": [
+    {
+     "q": "¿Cuánta agua le ponía a la masa madre al alimentarla?",
+     "gold": [
+      0,
+      1,
+      8,
+      9
+     ]
+    },
+    {
+     "q": "¿Y en qué barrio me dijiste que había fado?",
+     "gold": [
+      4,
+      5
+     ]
+    },
+    {
+     "q": "Recuérdame cómo era lo de ordenar por edad en Python",
+     "gold": [
+      2,
+      3
+     ]
+    },
+    {
+     "q": "¿El ETF tenía más comisiones que el fondo?",
+     "gold": [
+      6,
+      7
+     ]
+    }
+   ]
+  },
+  {
+   "name": "en-mixed",
+   "turns": [
+    "My tomato plants have yellow leaves at the bottom, what is wrong?",
+    "Lower yellow leaves usually mean nitrogen deficiency or overwatering. Check that the soil drains well and feed with a balanced fertilizer every two weeks.",
+    "How do I set up a reverse proxy with nginx for a Node app on port 3000?",
+    "In a server block add location / { proxy_pass http://127.0.0.1:3000; proxy_set_header Host $host; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; } then reload nginx.",
+    "What is a good beginner workout to build strength three days a week?",
+    "Try a full-body routine: squats, bench press, rows and overhead press, three sets of five to eight reps, adding a little weight every week.",
+    "Can you explain what a mortgage amortization schedule is?",
+    "It is a table of every payment over the life of the loan, showing how much goes to interest and how much reduces the principal. Early payments are mostly interest.",
+    "Should I prune the suckers on the tomatoes too?",
+    "For indeterminate varieties, removing suckers below the first flower cluster improves airflow and fruit size. Determinate plants need little pruning.",
+    "Also, how do I get HTTPS on that nginx proxy?",
+    "Install certbot and run certbot --nginx -d yourdomain.com. It edits the server block and renews the certificate automatically."
+   ],
+   "probes": [
+    {
+     "q": "Which fertilizer schedule did you suggest for my tomatoes?",
+     "gold": [
+      0,
+      1,
+      8,
+      9
+     ]
+    },
+    {
+     "q": "What were the sets and reps for the workout?",
+     "gold": [
+      4,
+      5
+     ]
+    },
+    {
+     "q": "Remind me the proxy_pass line",
+     "gold": [
+      2,
+      3
+     ]
+    },
+    {
+     "q": "Do the first loan payments go mostly to interest?",
+     "gold": [
+      6,
+      7
+     ]
+    }
+   ]
+  },
+  {
+   "name": "cross-en-content-other-questions",
+   "turns": [
+    "I have type 2 diabetes, which breakfast keeps my blood sugar stable?",
+    "Pair protein and fiber: eggs with vegetables, Greek yogurt with nuts and berries, or oatmeal with chia seeds. Avoid juices and white bread in the morning.",
+    "How do I write a SQL query that counts orders per customer?",
+    "SELECT customer_id, COUNT(*) AS orders FROM orders GROUP BY customer_id ORDER BY orders DESC;",
+    "What should I pack for a week of hiking in the Alps in July?",
+    "Layers: a rain shell, a warm fleece, quick-dry shirts, broken-in boots, a hat, sunscreen, a first-aid kit and a refillable water bottle.",
+    "Why does my car battery die when it is cold?",
+    "Cold slows the chemical reaction inside the battery and thickens the engine oil, so starting needs more current while the battery delivers less.",
+    "Thanks. Unrelated: what is the capital of Australia?",
+    "Canberra."
+   ],
+   "probes": [
+    {
+     "q": "¿Qué desayuno me recomendaste para el azúcar en sangre?",
+     "gold": [
+      0,
+      1
+     ]
+    },
+    {
+     "q": "Qual era a consulta SQL para contar pedidos por cliente?",
+     "gold": [
+      2,
+      3
+     ]
+    },
+    {
+     "q": "Qu'est-ce que je dois emporter pour la randonnée dans les Alpes ?",
+     "gold": [
+      4,
+      5
+     ]
+    },
+    {
+     "q": "Warum ist meine Autobatterie bei Kälte leer?",
+     "gold": [
+      6,
+      7
+     ]
+    },
+    {
+     "q": "Почему аккумулятор садится на холоде?",
+     "gold": [
+      6,
+      7
+     ]
+    },
+    {
+     "q": "你推荐的早餐是什么？我有糖尿病",
+     "gold": [
+      0,
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "name": "pt",
+   "turns": [
+    "Como faço um bolo de cenoura com cobertura de chocolate?",
+    "Bata 3 cenouras, 3 ovos e 1 xícara de óleo no liquidificador, misture com 2 xícaras de açúcar, 2 de farinha e 1 colher de fermento. Asse a 180 °C por 40 minutos. A cobertura é chocolate em pó, manteiga, açúcar e leite fervidos.",
+    "Quais são os documentos para tirar passaporte no Brasil?",
+    "RG ou CNH, título de eleitor com comprovante de votação, certificado de reservista para homens e o pagamento da taxa (GRU). O agendamento é no site da Polícia Federal.",
+    "Como configuro uma VPN no meu roteador?",
+    "Depende do modelo: entre no painel do roteador, procure a seção VPN, escolha WireGuard ou OpenVPN, importe o arquivo de configuração do provedor e ative.",
+    "E quanto tempo demora para o passaporte ficar pronto?",
+    "Normalmente de 6 a 10 dias úteis após o atendimento na Polícia Federal."
+   ],
+   "probes": [
+    {
+     "q": "Qual era a temperatura do forno para o bolo?",
+     "gold": [
+      0,
+      1
+     ]
+    },
+    {
+     "q": "Preciso do título de eleitor para o passaporte?",
+     "gold": [
+      2,
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "name": "fr-de",
+   "turns": [
+    "Comment préparer une pâte à crêpes sans grumeaux ?",
+    "Verse la farine dans un saladier, fais un puits, ajoute les œufs puis le lait petit à petit en fouettant. Laisse reposer une heure.",
+    "Wie kündige ich meinen Mobilfunkvertrag in Deutschland?",
+    "Schick eine schriftliche Kündigung mit Kundennummer an den Anbieter oder nutze den Kündigungsbutton auf der Webseite. Die Frist steht im Vertrag, meist ein Monat zum Laufzeitende.",
+    "Quelle est la meilleure façon d'apprendre la guitare seul ?",
+    "Apprends quelques accords de base (do, sol, ré, mi mineur), joue dix minutes par jour et choisis des chansons simples que tu aimes.",
+    "Und wie lange ist die Kündigungsfrist normalerweise?",
+    "Bei Verträgen nach März 2022 kann man nach der Mindestlaufzeit jederzeit mit einem Monat Frist kündigen."
+   ],
+   "probes": [
+    {
+     "q": "Combien de temps la pâte doit-elle reposer ?",
+     "gold": [
+      0,
+      1
+     ]
+    },
+    {
+     "q": "Welche Akkorde soll ich zuerst lernen?",
+     "gold": [
+      4,
+      5
+     ]
+    },
+    {
+     "q": "Wohin schicke ich die Kündigung?",
+     "gold": [
+      2,
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "name": "hard-es-34",
+   "turns": [
+    "Dame una receta de masa de pizza napolitana casera.",
+    "Para 4 bolas: 600 g de harina 00, 390 g de agua (65 % de hidratación), 18 g de sal y 2 g de levadura fresca. Amasa 10 minutos, deja 2 horas a temperatura ambiente y luego 24 horas en la nevera. Saca las bolas 3 horas antes de estirarlas.",
+    "En Rust me sale el error 'cannot borrow `v` as mutable because it is also borrowed as immutable', ¿qué hago?",
+    "Tienes una referencia inmutable viva mientras intentas modificar el vector. Termina de usar la referencia antes de mutar, clona el valor que necesitas, o reestructura con índices en vez de referencias. A veces basta con mover el push fuera del bucle que itera.",
+    "Voy tres días a Roma, ¿me haces un itinerario?",
+    "Día 1: Coliseo, Foro Romano y Palatino por la mañana; Trastevere por la tarde. Día 2: Museos Vaticanos, Capilla Sixtina y San Pedro; atardecer en Castel Sant'Angelo. Día 3: Panteón, Piazza Navona, Fontana di Trevi y Villa Borghese.",
+    "¿Cada cuánto alimento la masa madre una vez que ya está activa?",
+    "Si la guardas a temperatura ambiente, aliméntala cada 12 horas en proporción 1:1:1 (masa madre, harina, agua). En la nevera basta con una vez por semana, sacándola un día antes de hornear.",
+    "¿Cuál es la diferencia entre usar promesas con then y async/await en JavaScript?",
+    "Son lo mismo por debajo: async/await es azúcar sobre promesas. await no bloquea el hilo, solo pausa esa función hasta que la promesa se resuelve. Con then encadenas callbacks; con await el código se lee de arriba abajo y los errores se capturan con try/catch.",
+    "Estoy por pedir una hipoteca en España, ¿tipo fijo o variable?",
+    "Con el euríbor actual, el fijo da tranquilidad si el plazo es largo y tus ingresos son estables. El variable suele empezar más barato pero sube si suben los tipos. El mixto (fijo 5-10 años y luego variable) es un término medio.",
+    "¿Qué hago un fin de semana en Oporto?",
+    "Pasea por la Ribeira, cruza el puente Dom Luís I hacia Vila Nova de Gaia para visitar las bodegas de vino de Oporto, sube a la Torre dos Clérigos, entra en la librería Lello y prueba una francesinha.",
+    "Explícame LEFT JOIN contra INNER JOIN en SQL.",
+    "INNER JOIN devuelve solo las filas que tienen coincidencia en ambas tablas. LEFT JOIN devuelve todas las filas de la tabla izquierda y rellena con NULL las columnas de la derecha cuando no hay coincidencia.",
+    "¿Cómo hago crepes finas?",
+    "Bate 250 g de harina, 3 huevos, 500 ml de leche, una pizca de sal y 50 g de mantequilla derretida. Deja reposar la mezcla 30 minutos en la nevera. Cocina en sartén muy caliente con poca mantequilla, un cucharón por crepe.",
+    "En la declaración de la renta, ¿puedo deducirme el alquiler?",
+    "La deducción estatal por alquiler de vivienda habitual solo se mantiene para contratos anteriores a 2015. Muchas comunidades autónomas tienen su propia deducción para jóvenes o rentas bajas; revisa la de tu comunidad en el programa Renta Web.",
+    "¿Cómo creo un entorno virtual en Python?",
+    "Ejecuta python -m venv .venv en la carpeta del proyecto. Actívalo con source .venv/bin/activate en Linux o .venv\\Scripts\\activate en Windows, y después instala paquetes con pip.",
+    "Dame una receta de gazpacho.",
+    "Tritura 1 kg de tomates maduros, 1 pimiento verde, 1 pepino, 1 diente de ajo, 50 ml de aceite de oliva, un chorrito de vinagre de Jerez y sal. Cuela si lo quieres fino y sírvelo muy frío.",
+    "En Lisboa, ¿qué no me puedo perder?",
+    "Sube en el tranvía 28 por la Alfama hasta el castillo de San Jorge, pasea por el Barrio Alto de noche, come pasteles de nata en Belém y mira el atardecer desde el Miradouro da Senhora do Monte.",
+    "¿Qué es mejor, un ETF o un fondo indexado?",
+    "Replican índices igual. El ETF se compra y vende en bolsa en tiempo real y puede tener comisiones de corretaje; el fondo indexado en España permite traspasos sin pagar impuestos. Para inversión a largo plazo en España el fondo indexado suele ser más cómodo fiscalmente.",
+    "Acabo de adoptar un cachorro, ¿qué vacunas necesita?",
+    "Primera vacuna (parvovirus y moquillo) a las 6-8 semanas, la polivalente a las 10-12 semanas, refuerzo a las 14-16 semanas y la antirrábica a partir de los 3 meses. Desparasita cada mes hasta los 6 meses.",
+    "¿Cómo pongo una referencia dentro de un struct en Rust?",
+    "Necesitas un parámetro de tiempo de vida: struct Parser<'a> { input: &'a str }. Eso le dice al compilador que el Parser no puede vivir más que la cadena a la que apunta. Si no quieres lidiar con eso, guarda un String propio.",
+    "Mi gata vomita bolas de pelo a menudo, ¿es normal?",
+    "Ocasionalmente sí, pero si es frecuente cepíllala a diario, dale malta o un pienso específico para bolas de pelo, y consulta al veterinario si hay vómitos sin pelo, pérdida de apetito o estreñimiento.",
+    "Qué calor hace hoy, ¿no?",
+    "Sí, parece que hoy rondará los 34 grados. Bebe agua y evita el sol de mediodía."
+   ],
+   "probes": [
+    {
+     "q": "¿Cuántas horas dejaba fermentar la masa de la pizza en la nevera?",
+     "gold": [
+      0,
+      1
+     ]
+    },
+    {
+     "q": "What hydration percentage did you give me for the pizza?",
+     "gold": [
+      0,
+      1
+     ]
+    },
+    {
+     "q": "Lo del compilador que se quejaba de que tomaba prestado dos veces, ¿cómo era la solución?",
+     "gold": [
+      2,
+      3
+     ]
+    },
+    {
+     "q": "¿Y cómo se anotaba el tiempo de vida en la estructura?",
+     "gold": [
+      30,
+      31
+     ]
+    },
+    {
+     "q": "¿Qué día tocaba el Vaticano en el plan?",
+     "gold": [
+      4,
+      5
+     ]
+    },
+    {
+     "q": "¿Dónde estaban las bodegas de vino de Oporto?",
+     "gold": [
+      12,
+      13
+     ]
+    },
+    {
+     "q": "Which tram did you recommend in Lisbon?",
+     "gold": [
+      24,
+      25
+     ]
+    },
+    {
+     "q": "¿El await bloqueaba el hilo o no?",
+     "gold": [
+      8,
+      9
+     ]
+    },
+    {
+     "q": "¿Me convenía más tipo fijo o variable?",
+     "gold": [
+      10,
+      11
+     ]
+    },
+    {
+     "q": "¿Qué pasaba con lo del alquiler en Hacienda?",
+     "gold": [
+      18,
+      19
+     ]
+    },
+    {
+     "q": "Montre-moi encore la différence entre les jointures",
+     "gold": [
+      14,
+      15
+     ]
+    },
+    {
+     "q": "¿Cuándo le toca la segunda vacuna al perrito?",
+     "gold": [
+      28,
+      29
+     ]
+    },
+    {
+     "q": "Mi gata sigue igual, ¿qué le daba?",
+     "gold": [
+      32,
+      33
+     ]
+    },
+    {
+     "q": "¿Qué llevaba la sopa fría de tomate?",
+     "gold": [
+      22,
+      23
+     ]
+    },
+    {
+     "q": "¿Cuánto tiempo reposaba la mezcla de las crepes?",
+     "gold": [
+      16,
+      17
+     ]
+    },
+    {
+     "q": "¿Cómo activaba el entorno aislado en Windows?",
+     "gold": [
+      20,
+      21
+     ]
+    },
+    {
+     "q": "Was war steuerlich besser, ETF oder Indexfonds?",
+     "gold": [
+      26,
+      27
+     ]
+    },
+    {
+     "q": "¿Con qué frecuencia alimentaba el fermento del pan?",
+     "gold": [
+      6,
+      7
+     ]
+    },
+    {
+     "q": "O que eu não podia perder em Lisboa?",
+     "gold": [
+      24,
+      25
+     ]
+    },
+    {
+     "q": "Which day was the Colosseum?",
+     "gold": [
+      4,
+      5
+     ]
+    }
+   ]
+  }
+ ],
+ "summary_intents": {
+  "positive": [
+   "Resume toda la conversación",
+   "¿De qué hemos hablado hasta ahora?",
+   "Hazme un resumen de todo lo anterior",
+   "Summarize our conversation so far",
+   "Give me a recap of everything we discussed",
+   "What have we talked about?",
+   "Faça um resumo da nossa conversa",
+   "Résume notre conversation",
+   "Fasse unser Gespräch zusammen",
+   "Перескажи кратко наш разговор",
+   "总结一下我们的对话",
+   "Lista los temas que tratamos"
+  ],
+  "negative": [
+   "¿Cómo se hace una tortilla de patatas?",
+   "Resume este texto: el gato duerme en el sofá todo el día",
+   "What is the summary of the plot of Hamlet?",
+   "Recap the rules of chess",
+   "¿Qué tiempo hace en Madrid?",
+   "How do I talk to my boss about a raise?",
+   "Explain how vaccines work",
+   "¿De qué color es el cielo en Marte?",
+   "Write a summary of the French revolution",
+   "Fais-moi une liste de courses pour la semaine"
+  ]
+ },
+ "sensitive": {
+  "positive": [
+   "Tengo VIH y no sé cómo decírselo a mi pareja",
+   "My password for the bank is hunter2, can you check it is strong?",
+   "Me diagnosticaron depresión y tomo sertralina",
+   "I'm gay and haven't told my parents",
+   "Debo 20.000 euros y me van a embargar la casa",
+   "Vivo en la calle Mayor 12, 3ºB, Madrid, ¿qué supermercado hay cerca?",
+   "Mi número de tarjeta es 4111 1111 1111 1111",
+   "I was arrested last year for drunk driving",
+   "Estoy pensando en hacerme daño",
+   "Voto a un partido de extrema izquierda y en mi trabajo no lo saben",
+   "Estou grávida e ainda não contei a ninguém",
+   "Ich habe Schulden bei der Bank und kann nicht zahlen",
+   "Mi médico me dijo que tengo diabetes tipo 2",
+   "Llevo meses sin dormir por la ansiedad",
+   "My husband doesn't know I'm seeing a psychiatrist"
+  ],
+  "negative": [
+   "¿Cómo se hace una tortilla de patatas?",
+   "How do I sort a list in Python?",
+   "Recomiéndame un libro de ciencia ficción",
+   "What is the capital of Australia?",
+   "¿Qué barrio de Lisboa tiene fado?",
+   "How do I prune tomato plants?",
+   "Explica la diferencia entre un ETF y un fondo indexado",
+   "What is a good beginner workout?",
+   "Como faço um bolo de cenoura?",
+   "Wie kündige ich meinen Handyvertrag?",
+   "Mi perro se llama Rocky y tiene 3 anos, que vacunas necesita?",
+   "Rocky necesita las siguientes vacunas: la vacuna contra el parvovirus, el moquillo y la rabia.",
+   "¿Qué vacunas necesita un cachorro?",
+   "¿Cuántas calorías tiene un aguacate?",
+   "Cuanto es 17 por 23?",
+   "My cat keeps sneezing, should I see a vet?",
+   "¿Qué es la fotosíntesis?",
+   "Explica qué es un agujero negro"
+  ]
+ },
+ "unrelated": {
+  "es-mixed": [
+   "¿Cómo cambio una rueda pinchada?",
+   "¿Quién ganó el mundial de 2010?",
+   "Escríbeme un poema sobre el mar"
+  ],
+  "en-mixed": [
+   "How do I knit a scarf?",
+   "Who painted the Mona Lisa?",
+   "Translate 'good morning' to Japanese"
+  ],
+  "hard-es-34": [
+   "¿Cómo se cambia el aceite de una moto?",
+   "¿Cuántos huesos tiene el cuerpo humano?",
+   "Recomiéndame una serie de ciencia ficción",
+   "How do I learn to play chess?",
+   "¿Qué significa la palabra resiliencia?"
+  ]
+ }
+}

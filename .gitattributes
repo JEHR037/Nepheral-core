@@ -1,0 +1,7 @@
+# Normalise line endings in the repository; each checkout uses its platform's.
+* text=auto
+
+# Shell scripts must keep LF endings — a CRLF shebang line breaks bash on
+# Linux ("/usr/bin/env bash^M: no such file or directory").
+*.sh text eol=lf
+*.service text eol=lf

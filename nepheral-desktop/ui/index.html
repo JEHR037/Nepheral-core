@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nepheral</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="hdr">
+  <div class="brand">◇ Nepheral</div>
+  <div class="chips">
+    <div class="chip"><span data-i18n="chip.peers"></span> <b id="c-peers">–</b></div>
+    <div class="chip">h=<b id="c-height">–</b> · <span data-i18n="chip.final"></span> <b id="c-final">–</b> · <b id="c-blocks">–</b> <span data-i18n="chip.blocks"></span></div>
+    <div class="chip"><span data-i18n="chip.credits"></span> <b id="c-balance">–</b></div>
+    <div class="chip" id="c-model"><b>–</b></div>
+    <div class="chip"><span data-i18n="chip.id"></span> <b id="c-pid" class="mono">–</b></div>
+    <button class="chip warn" id="c-update" style="display:none;cursor:pointer"></button>
+    <button class="chip lockchip" id="c-lock"></button>
+    <button class="chip" id="lang-toggle" style="cursor:pointer"></button>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab" data-page="setup" id="tab-setup" data-i18n="tab.setup" style="display:none"></button>
+  <button class="tab active" data-page="chat" data-i18n="tab.chat"></button>
+  <button class="tab" data-page="rooms" data-i18n="tab.rooms"></button>
+  <button class="tab" data-page="peers" data-i18n="tab.peers"></button>
+  <button class="tab" data-page="ai" data-i18n="tab.ai"></button>
+  <button class="tab" data-page="network" data-i18n="tab.network"></button>
+  <button class="tab" data-page="leaderboard" data-i18n="tab.leaderboard"></button>
+  <button class="tab" data-page="wallet" data-i18n="tab.wallet"></button>
+  <button class="tab" data-page="market" data-i18n="tab.market"></button>
+  <button class="tab" data-page="governance" data-i18n="tab.governance"></button>
+  <button class="tab" data-page="api" data-i18n="tab.api"></button>
+</div>
+
+<!-- ============ SETUP WIZARD ============ -->
+<div class="page" id="page-setup">
+  <div class="wizard-steps" id="wiz-steps"></div>
+  <div class="card" id="wiz-body"></div>
+</div>
+
+<!-- ============ CHAT ============ -->
+<div class="page active" id="page-chat">
+  <div class="card locked-card" id="chat-locked" style="display:none">
+    <div class="locked-icon">◇</div>
+    <h3 data-i18n="lk.chatTitle"></h3>
+    <div class="hint" data-i18n="lk.chatLead"></div>
+    <div class="row"><button class="btn" data-unlock data-i18n="lk.unlock"></button></div>
+  </div>
+  <div class="chat-layout">
+    <div class="sess-list">
+      <button class="btn ghost sm" id="chat-new-local" data-i18n="chat.newLocal"></button>
+      <button class="btn ghost sm" id="chat-new-p2p" data-i18n="chat.newMesh"></button>
+      <div id="chat-sessions"></div>
+      <div class="cv-side">
+        <div id="chat-mem-box"></div>
+        <label class="cv-keep"><input type="checkbox" id="keep-convs"> <span data-i18n="cv.keep"></span></label>
+        <div class="hint" data-i18n="cv.keep.hint"></div>
+      </div>
+    </div>
+    <div class="chat-main">
+      <div class="row" id="chat-head" style="display:none">
+        <b id="chat-title"></b><span class="hint" id="chat-kind-hint"></span>
+        <span class="grow"></span>
+        <span class="hint" id="trust-wrap" style="display:none"><span data-i18n="chat.trust"></span>
+          <select id="trust">
+            <option value="any" data-i18n="chat.trust.any"></option>
+            <option value="p50" data-i18n="chat.trust.p50"></option>
+            <option value="p90" data-i18n="chat.trust.p90"></option>
+            <option value="p99" data-i18n="chat.trust.p99"></option>
+          </select>
+        </span>
+      </div>
+      <div class="thread" id="thread"></div>
+      <div class="composer">
+        <textarea id="input" rows="3"></textarea>
+        <button class="btn ghost cv-lock" id="private-toggle">🔒</button>
+        <button class="btn" id="send" data-i18n="common.send"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ROOMS ============ -->
+<div class="page" id="page-rooms">
+  <div class="card locked-card" id="rooms-locked" style="display:none">
+    <div class="locked-icon">◇</div>
+    <h3 data-i18n="lk.roomsTitle"></h3>
+    <div class="hint" data-i18n="lk.chatLead"></div>
+    <div class="row"><button class="btn" data-unlock data-i18n="lk.unlock"></button></div>
+  </div>
+  <div class="card" id="rooms-main">
+    <h3 data-i18n="rooms.title"></h3>
+    <div class="hint" data-i18n="rooms.sub"></div>
+    <div class="row">
+      <button class="btn" id="room-create" data-i18n="rooms.create"></button>
+      <input id="room-code" data-i18n-ph="rooms.codePh" maxlength="24" style="width:230px" class="mono">
+      <button class="btn ghost" id="room-join" data-i18n="rooms.join"></button>
+    </div>
+    <div class="hint" id="room-hint"></div>
+  </div>
+  <div class="card" id="room-active-card" style="display:none">
+    <h3 id="room-title"></h3>
+    <div class="hint" id="room-members"></div>
+    <div id="room-thread" style="display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto"></div>
+    <div class="row">
+      <input id="room-input" class="grow" data-i18n-ph="rooms.sendPh">
+      <button class="btn" id="room-send" data-i18n="common.send"></button>
+      <button class="btn danger sm" id="room-leave" data-i18n="rooms.leave"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PEERS ============ -->
+<div class="page" id="page-peers">
+  <div class="card">
+    <h3><span data-i18n="peers.title"></span> <span class="sub" id="peers-count"></span></h3>
+    <table><thead><tr>
+      <th data-i18n="peers.th.addr"></th><th data-i18n="peers.th.status"></th>
+      <th data-i18n="peers.th.ai"></th>
+      <th data-i18n="peers.th.frags"></th><th data-i18n="peers.th.seen"></th><th data-i18n="peers.th.rating"></th>
+    </tr></thead>
+    <tbody id="peers-body"></tbody></table>
+  </div>
+</div>
+
+<!-- ============ AI SETTINGS ============ -->
+<div class="page" id="page-ai">
+  <div id="ai-cards"></div>
+</div>
+
+<!-- ============ NETWORK ============ -->
+<div class="page" id="page-network">
+  <div id="net-cards"></div>
+</div>
+
+<!-- ============ LEADERBOARD ============ -->
+<div class="page" id="page-leaderboard">
+  <div class="card">
+    <h3 data-i18n="lb.title"></h3>
+    <div class="hint" data-i18n="lb.sub"></div>
+    <table><thead><tr>
+      <th data-i18n="lb.th.peer"></th><th data-i18n="lb.th.model"></th><th data-i18n="lb.th.contrib"></th>
+      <th data-i18n="lb.th.consumed"></th><th data-i18n="lb.th.wins"></th><th data-i18n="lb.th.quality"></th><th data-i18n="lb.th.health"></th>
+    </tr></thead>
+    <tbody id="lb-body"></tbody></table>
+  </div>
+</div>
+
+<!-- ============ WALLET ============ -->
+<div class="page" id="page-wallet">
+  <div class="card">
+    <h3 data-i18n="w.balance"></h3>
+    <div class="balance" id="w-balance">–</div>
+    <div id="w-redeem-grid" class="hint"></div>
+    <div class="row">
+      <div class="hint grow" id="w-redeemable"></div>
+      <button class="btn" id="w-redeem" data-i18n="w.redeemAll"></button>
+    </div>
+    <div class="row">
+      <span class="hint" data-i18n="w.custom"></span>
+      <input id="w-red-sh" type="number" min="0" data-i18n-ph="w.sharesPh" style="width:110px">
+      <input id="w-red-lot" type="number" min="0" data-i18n-ph="w.lotteriesPh" style="width:110px">
+      <button class="btn ghost sm" id="w-redeem-custom" data-i18n="w.redeemCustom"></button>
+    </div>
+    <div class="hint" id="w-redeem-msg"></div>
+  </div>
+  <div class="card">
+    <h3 data-i18n="w.transfer"></h3>
+    <div class="row">
+      <input id="t-to" class="grow mono" data-i18n-ph="w.toPh">
+      <input id="t-amount" type="number" min="1" data-i18n-ph="w.amountPh" style="width:110px">
+      <button class="btn" id="t-send" data-i18n="common.send"></button>
+    </div>
+    <div class="hint" id="t-msg"></div>
+  </div>
+  <div class="card">
+    <h3 data-i18n="w.sessions"></h3>
+    <div id="w-sessions"></div>
+    <div class="row">
+      <button class="btn ghost" id="w-open"></button>
+    </div>
+    <div class="hint" id="w-msg"></div>
+  </div>
+  <div class="card">
+    <h3 data-i18n="sec.title"></h3>
+    <div class="row">
+      <span class="hint" data-i18n="lk.state"></span><b id="w-lock-state"></b>
+      <span class="grow"></span>
+      <button class="btn ghost sm" id="w-lock-btn"></button>
+    </div>
+    <div class="row"><span class="hint" data-i18n="lk.wallet"></span><span class="mono" id="w-addr"></span></div>
+    <div class="row"><span class="hint" data-i18n="lk.node"></span><span class="mono" id="w-node"></span><span class="hint" id="w-deleg"></span></div>
+    <div class="hint" data-i18n="lk.earnings"></div>
+    <div class="row">
+      <span class="hint" data-i18n="lk.auto"></span>
+      <select id="w-autolock">
+        <option value="5"></option><option value="15"></option><option value="30"></option>
+        <option value="60"></option><option value="0"></option>
+      </select>
+    </div>
+    <div class="hint" data-i18n="sec.lead"></div>
+    <div class="row">
+      <input id="sec-old" type="password" class="grow" autocomplete="current-password" data-i18n-ph="sec.old">
+      <input id="sec-new" type="password" class="grow" autocomplete="new-password" data-i18n-ph="sec.new">
+      <input id="sec-new2" type="password" class="grow" autocomplete="new-password" data-i18n-ph="sec.confirm">
+      <button class="btn ghost" id="sec-go" data-i18n="sec.change"></button>
+    </div>
+    <div class="hint" id="sec-msg"></div>
+  </div>
+  <div class="card" id="w-ltc-card">
+    <h3 data-i18n="w.ltc"></h3>
+    <div id="w-ltc-body" class="hint"></div>
+  </div>
+  <div class="card">
+    <h3 data-i18n="w.activity"></h3>
+    <div class="filter-chips" id="w-filters">
+      <button class="fchip active" data-f="all" data-i18n="w.f.all"></button>
+      <button class="fchip" data-f="sent" data-i18n="w.f.sent"></button>
+      <button class="fchip" data-f="received" data-i18n="w.f.received"></button>
+      <button class="fchip" data-f="sessions" data-i18n="w.f.sessions"></button>
+      <button class="fchip" data-f="mints" data-i18n="w.f.mints"></button>
+    </div>
+    <table><thead><tr>
+      <th data-i18n="w.th.block"></th><th data-i18n="w.th.action"></th><th data-i18n="w.th.detail"></th>
+    </tr></thead>
+    <tbody id="w-history"></tbody></table>
+  </div>
+</div>
+
+<!-- ============ MARKET ============ -->
+<div class="page" id="page-market">
+  <div class="mkt-bar">
+    <span class="lbl" data-i18n="m.balance"></span><span class="val" id="m-balance">–</span>
+    <span class="sep"></span>
+    <span class="lbl" data-i18n="m.escrow"></span><span class="val" id="m-escrow">–</span>
+    <div class="mkt-standing" id="m-standing"></div>
+  </div>
+
+  <div class="book">
+    <div class="book-side asks">
+      <h3><span data-i18n="m.asks"></span><span class="sub" data-i18n="m.asks.sub"></span></h3>
+      <div class="book-scroll">
+        <table><thead><tr>
+          <th class="num" data-i18n="m.th.unit"></th>
+          <th class="num" data-i18n="m.th.credits"></th>
+          <th data-i18n="m.th.seller"></th>
+          <th></th>
+        </tr></thead>
+        <tbody id="m-asks"></tbody></table>
+      </div>
+    </div>
+
+    <div class="book-side bids">
+      <h3><span data-i18n="m.bids"></span><span class="sub" data-i18n="m.bids.sub"></span></h3>
+      <div class="book-scroll">
+        <table><thead><tr>
+          <th class="num" data-i18n="m.th.unit"></th>
+          <th class="num" data-i18n="m.th.credits"></th>
+          <th data-i18n="m.th.buyer"></th>
+          <th></th>
+        </tr></thead>
+        <tbody id="m-bids"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="mkt-entry">
+    <div class="card">
+      <h3 data-i18n="m.sell"></h3>
+      <div class="row">
+        <input id="m-ask-credits" class="w-num" type="number" min="1" data-i18n-ph="m.creditsPh">
+        <input id="m-ask-sats" class="w-num" type="number" min="1" data-i18n-ph="m.satsPh">
+        <input id="m-ask-addr" class="grow mono" data-i18n-ph="m.addrPh">
+        <button class="btn sm" id="m-ask-post" data-i18n="m.post"></button>
+      </div>
+      <div class="hint" id="m-ask-msg"></div>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="m.buy"></h3>
+      <div class="row">
+        <input id="m-bid-credits" class="w-num" type="number" min="1" data-i18n-ph="m.creditsPh">
+        <input id="m-bid-sats" class="w-num" type="number" min="1" data-i18n-ph="m.satsPh">
+        <button class="btn ghost sm" id="m-bid-post" data-i18n="m.post"></button>
+      </div>
+      <div class="hint" id="m-bid-msg" data-i18n="m.buyHint"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GOVERNANCE ============ -->
+<div class="page" id="page-governance">
+  <div class="card">
+    <h3 data-i18n="g.title"></h3>
+    <div class="hint" data-i18n="g.intro"></div>
+    <div class="row">
+      <span class="lbl" data-i18n="g.authority"></span><span class="val mono" id="g-authority">–</span>
+      <span class="lbl" data-i18n="g.weight"></span><span class="val" id="g-weight">–</span>
+      <span class="lbl" data-i18n="g.head"></span><span class="val" id="g-head">–</span>
+    </div>
+    <div class="hint" id="g-partners"></div>
+    <div class="hint" id="g-rules"></div>
+  </div>
+
+  <div class="card">
+    <h3 data-i18n="g.proposals"></h3>
+    <table><thead><tr>
+      <th>#</th>
+      <th data-i18n="g.th.action"></th>
+      <th data-i18n="g.th.status"></th>
+      <th data-i18n="g.th.tally"></th>
+      <th data-i18n="g.th.timeline"></th>
+      <th></th>
+    </tr></thead>
+    <tbody id="g-list"></tbody></table>
+  </div>
+
+  <div class="card">
+    <h3 data-i18n="g.propose"></h3>
+    <div class="row">
+      <select id="g-kind">
+        <option value="emission_target" data-i18n="g.kind.emission_target"></option>
+        <option value="channel_cost" data-i18n="g.kind.channel_cost"></option>
+        <option value="daily_mint_cap" data-i18n="g.kind.daily_mint_cap"></option>
+      </select>
+      <select id="g-channel">
+        <option value="chat" data-i18n="g.ch.chat"></option>
+        <option value="large_chat" data-i18n="g.ch.large_chat"></option>
+        <option value="frontier" data-i18n="g.ch.frontier"></option>
+      </select>
+      <input id="g-amount" class="w-num" type="number" min="1" data-i18n-ph="g.amountPh">
+      <button class="btn" id="g-submit" data-i18n="g.submit"></button>
+    </div>
+    <div class="hint" id="g-now"></div>
+    <div class="hint" id="g-msg"></div>
+  </div>
+</div>
+
+<!-- ============ API ============ -->
+<div class="page" id="page-api">
+  <div id="api-cards"></div>
+</div>
+
+<div id="toasts"></div>
+<dialog id="unlock-dlg">
+  <p style="margin-top:0;font-weight:600" id="ul-title"></p>
+  <div class="hint" id="ul-lead"></div>
+  <div id="ul-open" class="dlg-form">
+    <input id="ul-pass" type="password" autocomplete="current-password" data-i18n-ph="v.pass">
+  </div>
+  <div id="ul-restore" class="dlg-form" style="display:none">
+    <div class="callout warn" data-i18n="lk.restoreWarn"></div>
+    <textarea id="ul-phrase" rows="3" class="mono" spellcheck="false" autocomplete="off" data-i18n-ph="v.phrasePh"></textarea>
+    <input id="ul-new" type="password" autocomplete="new-password" data-i18n-ph="v.newPass">
+    <input id="ul-new2" type="password" autocomplete="new-password" data-i18n-ph="v.confirm">
+  </div>
+  <div class="hint bad" id="ul-err"></div>
+  <div class="row"><button class="linklike" id="ul-forgot"></button></div>
+  <div class="row" style="justify-content:flex-end">
+    <button class="btn ghost" id="ul-no" data-i18n="common.cancel"></button>
+    <button class="btn" id="ul-yes"></button>
+  </div>
+</dialog>
+<dialog id="confirm-dlg">
+  <p id="confirm-text" style="margin-top:0"></p>
+  <div class="row" style="justify-content:flex-end">
+    <button class="btn ghost" id="confirm-no" data-i18n="common.cancel"></button>
+    <button class="btn" id="confirm-yes" data-i18n="common.confirm"></button>
+  </div>
+</dialog>
+
+<dialog id="buy-dlg">
+  <p style="margin-top:0;font-weight:600" id="buy-title"></p>
+  <div class="callout warn" data-i18n="ltc.private"></div>
+  <p class="hint" id="buy-step1"></p>
+  <div class="row"><code class="mono" id="buy-addr" style="word-break:break-all;flex:1"></code><button class="btn ghost sm" id="buy-copy-addr" data-i18n="common.copy"></button></div>
+  <p class="hint" id="buy-step2" data-i18n="m.buy.step2"></p>
+  <div class="row"><code class="mono" id="buy-memo" style="word-break:break-all;flex:1"></code><button class="btn ghost sm" id="buy-copy-memo" data-i18n="common.copy"></button></div>
+  <p class="hint" data-i18n="m.buy.step3"></p>
+  <input id="buy-txid" class="mono" style="width:100%" spellcheck="false" autocomplete="off">
+  <div class="hint" id="buy-msg"></div>
+  <div class="row" style="justify-content:flex-end">
+    <button class="btn ghost" id="buy-no" data-i18n="common.cancel"></button>
+    <button class="btn" id="buy-yes" data-i18n="m.buy.claim"></button>
+  </div>
+</dialog>
+
+<dialog id="rate-dlg">
+  <p style="margin-top:0" data-i18n="rate.title"></p>
+  <div class="row">
+    <select id="rate-reason">
+      <option value="incorrect" data-i18n="rate.r.incorrect"></option>
+      <option value="harmful" data-i18n="rate.r.harmful"></option>
+      <option value="off_topic" data-i18n="rate.r.off_topic"></option>
+      <option value="incomplete" data-i18n="rate.r.incomplete"></option>
+      <option value="refused" data-i18n="rate.r.refused"></option>
+    </select>
+  </div>
+  <textarea id="rate-note" rows="3" maxlength="280" style="width:100%;margin-top:8px" data-i18n-ph="rate.notePh"></textarea>
+  <div class="hint" id="rate-msg"></div>
+  <div class="row" style="justify-content:flex-end">
+    <button class="btn ghost" id="rate-no" data-i18n="common.cancel"></button>
+    <button class="btn" id="rate-yes" data-i18n="rate.send"></button>
+  </div>
+</dialog>
+
+<script src="i18n.js"></script>
+<script src="markdown.js"></script>
+<script src="conversations.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

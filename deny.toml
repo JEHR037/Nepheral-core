@@ -1,0 +1,65 @@
+# cargo-deny: advisories, licences, bans and sources of every dependency.
+# Run with `just audit` or `cargo deny check`. Policy in
+# docs/standards/security-and-dependencies.md; the licence list is
+# ADR-0018 (docs/adr/0018-dependency-licences.md) and changes only with it.
+
+[graph]
+# The platforms this repository builds. The phone apps are not part of it,
+# so dependencies used only on Android or iOS are not checked here.
+targets = [
+    "x86_64-pc-windows-msvc",
+    "x86_64-unknown-linux-gnu",
+    "aarch64-unknown-linux-gnu",
+]
+all-features = false
+
+[advisories]
+version = 2
+yanked = "deny"
+# Every entry needs: the advisory, why the fix cannot be taken, which
+# dependency holds it back, and the date to review it again.
+ignore = [
+    { id = "RUSTSEC-2024-0436", reason = "paste is unmaintained and has no successor release. Build-time macro only. Held back by gemm 0.19, which candle 0.11 (the memory model in recall) depends on. Review 2027-01-10 or when candle moves off gemm 0.19." },
+    { id = "RUSTSEC-2024-0370", reason = "proc-macro-error is unmaintained and has no fix. Build-time macro only. Held back by glib-macros 0.18 (GTK 3 bindings used by Tauri on Linux). Review 2027-01-10 or when Tauri moves to newer GTK bindings." },
+    { id = "RUSTSEC-2026-0173", reason = "proc-macro-error2 is unmaintained and has no fix. Build-time macro only. Held back by getset, used by neli 0.7, used by local-ip-address 0.6 on Linux; no newer release of either. Review 2027-01-10." },
+]
+
+[licenses]
+version = 2
+confidence-threshold = 0.8
+# The list is ADR-0018's, complete on purpose, even for licences no
+# dependency uses today.
+unused-allowed-license = "allow"
+allow = [
+    "0BSD",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-1-Clause",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BSL-1.0",
+    "CC0-1.0",
+    "CDLA-Permissive-2.0",
+    "ISC",
+    "MIT",
+    "MIT-0",
+    "MPL-2.0",
+    "Unicode-3.0",
+    "Unlicense",
+    "Zlib",
+]
+
+# The workspace's own crates are BUSL-1.1 and never published.
+[licenses.private]
+ignore = true
+
+[bans]
+multiple-versions = "allow"
+wildcards = "deny"
+allow-wildcard-paths = true
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

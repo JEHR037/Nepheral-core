@@ -1,0 +1,33 @@
+# Rust
+/target/
+**/*.rs.bk
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.pdb
+*.exe
+*.dll
+*.so
+*.dylib
+*.wasm
+
+# Certificates (never commit keys)
+*.pem
+*.key
+*.cert
+
+# Local testnet data
+/.local-testnet/
+
+# Release outputs
+dist/

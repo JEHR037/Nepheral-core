@@ -1,0 +1,105 @@
+[package]
+name = "app-kernel"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Orchestrator for Nepheral multi-target binaries"
+publish = false
+
+[dependencies]
+tokio = { workspace = true, features = ["sync"] }
+tracing.workspace = true
+tracing-subscriber.workspace = true
+mesh-network = { path = "../mesh-network" }
+core-crypto = { path = "../core-crypto" }
+ai-engine = { path = "../ai-engine" }
+utils = { path = "../utils" }
+# Conversation memory chosen on the device: desktop and phone only.
+nepheral-recall = { path = "../recall", optional = true }
+postcard.workspace = true
+# UPnP-IGD, NAT-PMP and PCP: asks the router to forward the mesh port, so a
+# node at home is reachable directly instead of through relays.
+portmapper = { version = "0.19", default-features = false }
+nepheral-api = { path = "../nepheral-api", optional = true }
+async-stream = { workspace = true, optional = true }
+futures = { workspace = true, optional = true }
+rcgen = "0.12"
+hex.workspace = true
+quinn.workspace = true
+zeroize.workspace = true
+# Reads the wallet's password at nepheral-node's command line without echo.
+rpassword = "7"
+local-ip-address.workspace = true
+mdns-sd.workspace = true
+chrono = "0.4"
+serde.workspace = true
+serde_json.workspace = true
+ed25519-dalek.workspace = true
+x25519-dalek.workspace = true
+sha2.workspace = true
+argon2.workspace = true
+aes.workspace = true
+cbc.workspace = true
+chacha20poly1305.workspace = true
+rand.workspace = true
+async-trait.workspace = true
+
+# Optional: local API server exposing nepheral's native inference over HTTP.
+# The API shape mirrors Ollama's /api/{chat,generate,tags} so existing
+# tools (Continue.dev, Open WebUI, scripts) work unchanged, but the
+# server itself is Nepheral — not a wrapper around an Ollama install.
+axum = { version = "0.7", optional = true, features = ["json"] }
+tower-http = { version = "0.5", optional = true, features = ["cors"] }
+
+
+[features]
+default = []
+# The mesh runtime itself (QUIC accept loop, wire-protocol dispatch, gossip,
+# discovery). Every node build enables it; it deliberately pulls in no HTTP
+# stack so the headless binary stays free of axum/nepheral-api.
+node_runtime = []
+node_only = ["node_runtime"]
+# Headless node + in-process llama-cpp CPU inference — the binary loads
+# the GGUF directly instead of HTTP-bridging to a sidecar process.
+node_only_local  = ["node_only", "ai-engine/local-inference"]
+# GPU-accelerated headless variants — same idea as node_only_local but
+# offload to the GPU instead of pure CPU. Needs the Vulkan SDK / CUDA
+# toolkit on the build host; see ai-engine's local-inference-* features.
+node_only_vulkan = ["node_only", "ai-engine/local-inference-vulkan"]
+node_only_cuda   = ["node_only", "ai-engine/local-inference-cuda"]
+# Same node, but one binary auto-picks CUDA/Vulkan/CPU at runtime instead of
+# being built for a single fixed backend — see ai-engine/local-inference-auto.
+node_only_gpu_auto = ["node_only", "ai-engine/local-inference-auto"]
+# Everything the desktop client needs: full AppState surface (wallet,
+# sessions, rooms) + shared node runtime + API daemon. Consumed as a
+# library by nepheral-desktop (Tauri).
+client = ["node_runtime", "local-api-server", "dep:nepheral-recall"]
+# client + in-process llama-cpp inference, one per backend
+# (nepheral-desktop --features cpu / vulkan / cuda).
+client-cpu    = ["client", "ai-engine/local-inference"]
+client-vulkan = ["client", "ai-engine/local-inference-vulkan"]
+client-cuda   = ["client", "ai-engine/local-inference-cuda"]
+# client + runtime GPU auto-detect (CUDA or Vulkan, falling back to CPU) —
+# one binary instead of picking cpu/vulkan/cuda at build time. Needs both
+# the CUDA toolkit and Vulkan SDK on the build host.
+client-gpu-auto = ["client", "ai-engine/local-inference-auto"]
+local-api-server = ["axum", "tower-http", "tokio/net", "nepheral-api", "async-stream", "futures"]
+
+[[bin]]
+name = "nepheral-node"
+path = "src/main.rs"
+required-features = ["node_only"]
+
+# Probes that talk to the live mesh: they need the node runtime.
+[[example]]
+name = "ask_probe"
+required-features = ["node_runtime"]
+
+[[example]]
+name = "light_probe"
+required-features = ["node_runtime"]
+
+[[example]]
+name = "lottery_probe"
+required-features = ["node_runtime"]

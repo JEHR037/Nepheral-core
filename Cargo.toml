@@ -1,0 +1,74 @@
+[workspace]
+members = [
+    "core-crypto",
+    "mesh-network",
+    "app-kernel",
+    "ai-engine",
+    "utils",
+    "nepheral-api",
+    "nepheral-desktop",
+    "recall",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.5.4"
+edition = "2021"
+authors = ["Javier Hernandez"]
+license = "BUSL-1.1"
+repository = "https://github.com/JEHR037/Nepheral-core"
+description = "Nepheral - Distributed Cryptography via Operational Fragmentation"
+
+[workspace.dependencies]
+# QUIC transport layer
+quinn = { version = "0.11", features = ["runtime-tokio"] }
+tokio = { version = "1.36", features = ["full"] }
+
+# Cryptographic primitives
+zeroize = { version = "1.7", features = ["zeroize_derive"] }
+rand = "0.8"
+sha2 = "0.10"
+aes = "0.8"
+cbc = { version = "0.1", features = ["alloc"] }
+rcgen = "0.12"
+hex = "0.4"
+bip39 = "2.0"
+ed25519-dalek = { version = "2", features = ["pkcs8"] }
+
+# X25519 ECDH + ed25519→X25519 conversion. Used by the agent-room
+# encryption layer: sender wraps a symmetric session key for each
+# AI-capable recipient via X25519(eph_priv, recipient_x_pub), so
+# only the lottery winner (who holds the corresponding ed25519
+# wallet) can unwrap it. curve25519-dalek exposes the Edwards→
+# Montgomery point conversion ed25519-dalek doesn't surface.
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+curve25519-dalek = "4"
+
+# Symmetric AEAD for the wrapped-key payload and the message
+# ciphertext itself. XChaCha20-Poly1305 takes a 24-byte nonce so
+# random nonces are safe without state.
+chacha20poly1305 = "0.10"
+argon2 = "0.5"
+
+
+# Serde for serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+postcard = { version = "1.0", default-features = false, features = ["alloc"] }
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Network utilities
+local-ip-address = "0.6"
+mdns-sd = "0.13"
+
+# HTTP server (used by nepheral-api OpenAI-compatible daemon)
+axum = { version = "0.7", features = ["json", "tokio", "macros"] }
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+async-trait = "0.1"
+futures = "0.3"
+async-stream = "0.3"
+tokio-stream = { version = "0.1", features = ["sync"] }

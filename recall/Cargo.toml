@@ -1,0 +1,27 @@
+[package]
+name = "nepheral-recall"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Conversation memory decided on the device: multilingual embeddings and the rules for which context a question carries"
+publish = false
+
+[dependencies]
+candle-core = "0.11"
+candle-nn = "0.11"
+half = "2"
+memmap2 = "0.9"
+safetensors = "0.8"
+# Pure-Rust regular expressions: nothing to cross-compile for the phone.
+tokenizers = { version = "0.22", default-features = false, features = ["fancy-regex"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+unicode-normalization = "0.1"
+
+[dev-dependencies]
+# The bench compares the chosen model with others, and with candle's own
+# XLM-RoBERTa.
+candle-transformers = "0.11"
+sha2 = "0.10"

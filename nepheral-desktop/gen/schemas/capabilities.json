@@ -1,0 +1,1 @@
+{"default":{"identifier":"default","description":"Unlock and main windows: core IPC (invoke + events) only","local":true,"windows":["unlock","main"],"permissions":["core:default"]}}

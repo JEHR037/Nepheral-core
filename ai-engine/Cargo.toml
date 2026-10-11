@@ -1,0 +1,54 @@
+[package]
+name = "ai-engine"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "AI inference engine with semantic obfuscation for Nepheral"
+publish = false
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rand.workspace = true
+tracing.workspace = true
+zeroize.workspace = true
+sha2.workspace = true
+# The same reqwest as the desktop updater, so there is one HTTP and TLS stack.
+# rustls with ring, the provider the mesh transport already uses.
+reqwest = { version = "0.13", features = ["json", "stream", "rustls-no-provider"], default-features = false }
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+async-trait = "0.1"
+chrono = "0.4"
+hex = "0.4"
+dirs-next = "2.0"
+# Hardware sizing is needed by every build (the headless CLI sizes models
+# too), so this is not tied to the llama.cpp feature.
+sysinfo = "0.30"
+
+# Optional: local in-process inference
+llama-cpp-2 = { version = "0.1.157", optional = true }
+# The same crate llama-cpp-2 already builds, named directly so the loader
+# can install a log callback and quote llama.cpp's own reason for refusing a
+# model, rather than this code carrying its own idea of what is supported.
+llama-cpp-sys-2 = { version = "0.1.157", optional = true }
+encoding_rs = { version = "0.8", optional = true }
+core-crypto = { path = "../core-crypto", optional = true }
+
+[features]
+default = []
+local-inference        = ["llama-cpp-2", "llama-cpp-sys-2", "encoding_rs", "core-crypto"]
+local-inference-cuda   = ["local-inference", "llama-cpp-2/cuda"]
+local-inference-vulkan = ["local-inference", "llama-cpp-2/vulkan"]
+local-inference-metal  = ["local-inference", "llama-cpp-2/metal"]
+# Own-name alias so local_backend.rs can gate on `feature = "dynamic-backends"`
+# for itself rather than reaching into llama-cpp-2's feature namespace, which
+# cfg() can't see across the dependency boundary.
+dynamic-backends        = ["llama-cpp-2/dynamic-backends"]
+# One build, runtime GPU pick: bundles the CUDA and Vulkan GGML backends as
+# loadable modules (see local_backend.rs's shared_backend()) instead of
+# statically linking a single backend in, so the same binary runs on an
+# NVIDIA box, an AMD/Intel Vulkan box, or CPU-only, falling back automatically.
+# Needs both the CUDA toolkit and Vulkan SDK on the build host.
+local-inference-auto   = ["local-inference", "dynamic-backends", "local-inference-cuda", "local-inference-vulkan"]

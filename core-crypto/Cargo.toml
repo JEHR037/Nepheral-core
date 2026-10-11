@@ -1,0 +1,24 @@
+[package]
+name = "core-crypto"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Shamir Secret Sharing and cryptographic primitives for Nepheral"
+publish = false
+
+[dependencies]
+zeroize.workspace = true
+rand.workspace = true
+sha2.workspace = true
+serde.workspace = true
+rcgen.workspace = true
+hex.workspace = true
+bip39.workspace = true
+ed25519-dalek.workspace = true
+x25519-dalek.workspace = true
+curve25519-dalek.workspace = true
+chacha20poly1305.workspace = true
+serde_json.workspace = true
+postcard.workspace = true
+tracing.workspace = true

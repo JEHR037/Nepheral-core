@@ -1,0 +1,53 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security problems are never reported here. Follow SECURITY.md instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: Steps, configuration and, if possible, a local multi-node setup.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The version shown in the app, or the commit you built.
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Desktop client
+        - Headless node
+        - Local API
+        - Chain or economy
+        - Mesh or networking
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Operating system and hardware
+      description: For example "Windows 11, Ryzen 7, RTX 3060, CUDA build".
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Remove IP addresses, keys and anything personal before pasting.
+      render: text
