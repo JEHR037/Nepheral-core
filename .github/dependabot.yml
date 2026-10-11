@@ -9,6 +9,12 @@ updates:
     cooldown:
       default-days: 2
     open-pull-requests-limit: 5
+    # A major version changes behaviour and APIs, so it goes through an RFC
+    # and an ADR like any other change. Alerts still report a vulnerability
+    # that only a new major version fixes.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: build
       include: scope
