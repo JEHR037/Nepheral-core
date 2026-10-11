@@ -72,6 +72,26 @@ jobs:
       - name: Clippy (workspace, without local inference)
         run: cargo clippy --workspace --all-targets --no-default-features -- -D warnings
 
+  local-inference:
+    name: Check (local inference)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # llama.cpp is built by its crate's build script: cmake, and libclang
+      # for the bindings.
+      - name: Install the build tools llama.cpp needs
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake clang libclang-dev
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      # The jobs above build without local inference, so a change in the
+      # llama.cpp bindings would only show up here.
+      - name: Check the headless node with local inference
+        run: cargo check -p app-kernel --features node_only_local
+
   dependencies:
     name: Dependencies
     runs-on: ubuntu-24.04
