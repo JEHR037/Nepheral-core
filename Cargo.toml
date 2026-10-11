@@ -67,7 +67,7 @@ mdns-sd = "0.13"
 # HTTP server (used by nepheral-api OpenAI-compatible daemon)
 axum = { version = "0.7", features = ["json", "tokio", "macros"] }
 tower = { version = "0.5", features = ["util"] }
-tower-http = { version = "0.5", features = ["cors", "trace"] }
+tower-http = { version = "0.6", features = ["cors", "trace"] }
 async-trait = "0.1"
 futures = "0.3"
 async-stream = "0.3"
