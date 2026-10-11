@@ -26,7 +26,7 @@ sha2.workspace = true
 # differ: Windows leaves v6-only on, most Linux distros turn it off. Without
 # pinning it we would get a dual-stack socket on Linux and a v6-only one on
 # Windows from identical code.
-socket2 = "0.5"
+socket2 = "0.6"
 
 [dev-dependencies]
 rcgen = "0.12"
