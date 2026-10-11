@@ -62,7 +62,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 # Network utilities
 local-ip-address = "0.6"
-mdns-sd = "0.13"
+mdns-sd = "0.21"
 
 # HTTP server (used by nepheral-api OpenAI-compatible daemon)
 axum = { version = "0.7", features = ["json", "tokio", "macros"] }
