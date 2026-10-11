@@ -28,7 +28,7 @@ tokio = { version = "1.36", features = ["full"] }
 zeroize = { version = "1.7", features = ["zeroize_derive"] }
 rand = "0.8"
 sha2 = "0.10"
-aes = "0.8"
+aes = "0.9"
 cbc = { version = "0.1", features = ["alloc"] }
 rcgen = "0.12"
 hex = "0.4"
