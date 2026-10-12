@@ -35,7 +35,9 @@ answers: retrieval-augmented generation.
 ### What a map is
 
 A knowledge map is a downloadable package of passages from books and
-documentation under open licences, with a vector for each passage.
+documentation under open licences, with a vector for each passage. It is
+one safetensors file: the passages' text, their vectors, the source cards,
+the licence texts, and the manifest in the file's metadata.
 
 - **Passages** of 120 words, cut in reading order, so every passage has a
   previous and a next one in the same source. Passages made mostly of
@@ -65,14 +67,16 @@ are in the format from the first map, so later maps can target the
 weaknesses of a model size or family without a format change.
 
 The first map is `general`, class `all`: 50 sources across the nine topics
-above, about 62,000 passages, about 133 MB.
+above, 62,204 passages, 140 MB.
 
 ### Retrieval on the node that answers
 
 The node that writes the answer is the one that searches its maps: the
-person's own node in the local chat and the local API, and the responder for
-a question sent to the mesh. Both already hold the question in plaintext;
-retrieval sends nothing anywhere.
+person's own node in the local chat, and the responder for a question sent
+to the mesh. Both already hold the question in plaintext; retrieval sends
+nothing anywhere. The local API is left out: the tools that call it send
+many requests in a row and bring their own context, and 20 seconds more per
+request would stall them.
 
 1. **Rewrite.** The node's own model, with reasoning off, writes an English
    translation of the question (at most 80 tokens) and a hypothetical answer
@@ -132,8 +136,8 @@ The AI section of the desktop app gets a Maps panel that:
   it;
 - flags installed maps of another class after the model changes.
 
-Headless nodes get the same actions from the command line. Maps live in the
-node's data directory, one directory per map.
+Headless nodes get the same actions from the command line. Each map is one
+file in the node's data directory, under `maps/`.
 
 ### Distribution
 

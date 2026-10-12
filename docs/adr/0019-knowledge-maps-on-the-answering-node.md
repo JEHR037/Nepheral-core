@@ -37,7 +37,7 @@ The asker searches its maps and sends the excerpts with the question.
 ### Option 3: retrieval on the node that answers
 
 The node that writes the answer searches the maps it holds: the person's
-own node for the local chat and the local API, the responder for the mesh.
+own node for the local chat, the responder for the mesh.
 
 - Benefits: the node that holds the question in plaintext is the only one
   that touches it; nothing changes in the protocol; askers need nothing.
@@ -58,11 +58,14 @@ each release. The lottery does not prefer nodes with maps.
 
 ### Key points
 
-- **Format.** A map holds 120-word passages in reading order, one vector per
-  passage from `nai-memory-v1`, one vector per source made from its title
-  and author, a manifest, and the licence texts of its sources. The manifest
-  records the hash of the model that made the vectors; a map made with
-  another model is not used.
+- **Format.** A map is one safetensors file: 120-word passages in reading
+  order, one vector per passage from `nai-memory-v1`, one vector per source
+  made from its title and author, the licence texts of its sources, and a
+  manifest in the metadata. The manifest records the hash of the model that
+  made the vectors; a map made with another model is not used.
+- **Where it runs.** The local chat and answers for the mesh. The local API
+  is left out: the tools that call it send many requests in a row and bring
+  their own context, and the rewrite would add about 20 seconds to each.
 - **Labels.** Every map carries a topic, a class (`b3`, `b9`, `b14`, `b27`,
   `b34` or `all`) and an optional model family. The node takes its class
   from the parameter count in its GGUF file. The class boundaries are
@@ -87,8 +90,8 @@ each release. The lottery does not prefer nodes with maps.
   class and family (falling back to `all`), shows their sources and
   licences, and downloads, verifies and removes them. Headless nodes do the
   same from the command line.
-- **First map.** `general`, class `all`: the 50 sources of the test, about
-  62,000 passages and 133 MB, shipped whole.
+- **First map.** `general`, class `all`: the 50 sources of the test,
+  62,204 passages and 140 MB, shipped whole.
 - **No announcement.** Nodes do not tell peers which maps they hold, and the
   lottery ignores maps.
 
@@ -115,9 +118,9 @@ The licences of map content are set by
 
 - About 20 seconds more per answer on a four-core CPU: 18 for the rewrite,
   1 to 2 for extraction. Within the 120 seconds an asker waits.
-- Disk: 133 MB for the first map plus 128 MB for the memory model.
-- Memory: the vectors of an installed map are held while the node runs,
-  about 95 MB for the first map with 32-bit floats.
+- Disk: 140 MB for the first map plus 128 MB for the memory model.
+- Memory: a map is mapped from its file, not read into memory; while it is
+  searched, its 96 MB of vectors and 44 MB of text sit in the page cache.
 - The quality of an answer from the mesh depends on the responder's maps,
   which the asker does not choose.
 - To revisit when 8-bit vectors are measured (maps per topic of 7 to 10 MB),
@@ -128,12 +131,15 @@ The licences of map content are set by
 
 ### Where it lives
 
-- `recall`: the map format, loading, search and sentence extraction, and the
-  public map builder.
-- `app-kernel`: the built-in map catalog, downloads and verification, and
-  retrieval before an answer is written, in the mesh path
-  (`agent.rs`, `serve_collected`) and the local chat and local API paths.
-- `nepheral-desktop/ui`: the Maps panel.
+- `recall/src/map.rs`: the map format, loading, search and sentence
+  extraction; `recall/examples/build_map.rs`: the public map builder.
+- `app-kernel/src/maps.rs`: the built-in map catalog, downloads and
+  verification, and retrieval; `recall_model.rs`: the memory model, which
+  headless nodes now carry too (the `knowledge-maps` feature).
+- `app-kernel/src/agent.rs`: retrieval before an answer is written, in the
+  mesh path (`serve_collected`) and the local chat.
+- `nepheral-desktop/ui`: the Maps card on the AI page;
+  `nepheral-node maps`: the same on headless nodes.
 
 ### Next steps
 
