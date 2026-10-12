@@ -9,6 +9,14 @@ moves to a version heading when that version is released.
 
 ## [Unreleased]
 
+### Changed
+
+- llama.cpp bindings updated to llama-cpp-2 0.1.159. Its token functions
+  moved from `LlamaModel` to `LlamaVocab`; replies and speed are unchanged.
+- `NEPHERAL_FLASH_ATTN` (`on`, `off` or `auto`) sets flash attention for
+  local inference. The default stays `auto`, which already turns it on
+  wherever the device supports it.
+
 ## [0.5.4] - 2026-10-11
 
 First public release of the source code. Everything below is what this
