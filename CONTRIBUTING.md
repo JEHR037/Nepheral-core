@@ -45,8 +45,11 @@ no other source-available licences. The allowed licences and the reasons are
 in [ADR-0018](docs/adr/0018-dependency-licences.md); CI enforces the list
 with `cargo deny`.
 
-The terms for outside contributions are being finalised; until they are
-published, open an issue before starting work you want merged.
+Knowledge maps are the one exception. They are separate works, downloaded
+on request and never built in, so their content may also come from sources
+under CC BY-SA, the GFDL or the GPL, each kept under its own licence with
+its attribution. Non-commercial and no-derivatives licences stay out there
+too. The rules are in [ADR-0020](docs/adr/0020-licences-for-knowledge-map-content.md).
 
 ## Workflow
 
