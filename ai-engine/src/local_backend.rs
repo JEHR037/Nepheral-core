@@ -14,7 +14,7 @@ mod inner {
     use llama_cpp_2::llama_backend::LlamaBackend;
     use llama_cpp_2::llama_batch::LlamaBatch;
     use llama_cpp_2::model::params::LlamaModelParams;
-    use llama_cpp_2::model::{AddBos, LlamaChatMessage, LlamaChatTemplate, LlamaModel};
+    use llama_cpp_2::model::{LlamaChatMessage, LlamaChatTemplate, LlamaModel};
     use llama_cpp_2::sampling::LlamaSampler;
 
     use crate::backend::{InferenceBackend, InferenceError};
@@ -138,6 +138,27 @@ mod inner {
     /// enumeration (hw_detect) has a backend to query.
     pub fn ensure_backend() -> Result<(), InferenceError> {
         shared_backend().map(|_| ())
+    }
+
+    /// Flash attention for every context: `NEPHERAL_FLASH_ATTN` set to `on`
+    /// or `off` forces it; anything else lets llama.cpp decide per device.
+    fn flash_attention() -> llama_cpp_sys_2::llama_flash_attn_type {
+        match std::env::var("NEPHERAL_FLASH_ATTN").as_deref() {
+            Ok("on") => llama_cpp_sys_2::LLAMA_FLASH_ATTN_TYPE_ENABLED,
+            Ok("off") => llama_cpp_sys_2::LLAMA_FLASH_ATTN_TYPE_DISABLED,
+            _ => llama_cpp_sys_2::LLAMA_FLASH_ATTN_TYPE_AUTO,
+        }
+    }
+
+    /// Turns one token's bytes into text. A multi-byte character can be split
+    /// across tokens; the decoder keeps the unfinished bytes for the next call.
+    fn decode_piece(decoder: &mut encoding_rs::Decoder, bytes: &[u8]) -> String {
+        let room = decoder
+            .max_utf8_buffer_length(bytes.len())
+            .unwrap_or(bytes.len() * 3 + 4);
+        let mut text = String::with_capacity(room);
+        let _ = decoder.decode_to_string(bytes, &mut text, false);
+        text
     }
 
     use crate::types::{FinishReason, Message, MessageRole, ModelConfig, StreamChunk};
@@ -524,12 +545,7 @@ mod inner {
                     p
                 }
             };
-            let count = |p: &str| {
-                self.model
-                    .str_to_token(p, AddBos::Never)
-                    .map(|t| t.len())
-                    .unwrap_or(usize::MAX)
-            };
+            let count = |p: &str| self.model.vocab().tokenize(p.as_bytes(), false, true).len();
             let fitted = fit_messages(messages, max_prompt, render, count);
             if fitted.dropped > 0 {
                 tracing::info!(
@@ -643,7 +659,8 @@ mod inner {
         where
             F: FnMut(&str),
         {
-            let mut tokens = model.str_to_token(prompt, AddBos::Never)?;
+            let vocab = model.vocab();
+            let mut tokens = vocab.tokenize(prompt.as_bytes(), false, true);
 
             if tokens.is_empty() {
                 return Err("empty prompt after tokenization".into());
@@ -686,7 +703,8 @@ mod inner {
             let ctx_params = LlamaContextParams::default()
                 .with_n_ctx(std::num::NonZeroU32::new(n_ctx as u32))
                 .with_n_batch(n_ctx as u32)
-                .with_n_ubatch(n_ubatch);
+                .with_n_ubatch(n_ubatch)
+                .with_flash_attention_policy(flash_attention());
             let mut ctx = model.new_context(backend, ctx_params)?;
 
             // Everything that touches the context runs inside this closure, so
@@ -759,16 +777,17 @@ mod inner {
                     let new_token = sampler.sample(&ctx, batch.n_tokens().saturating_sub(1));
                     sampler.accept(new_token);
 
-                    if model.is_eog_token(new_token) {
+                    if vocab.is_eog(new_token) {
                         break FinishReason::Eog;
                     }
                     if n_cur >= max_pos {
                         break FinishReason::MaxTokens;
                     }
 
-                    let piece = model.token_to_piece(new_token, &mut decoder, true, None)?;
+                    let piece =
+                        decode_piece(&mut decoder, &vocab.token_to_piece(new_token, true, None));
 
-                    // Belt and braces behind is_eog_token: a GGUF whose metadata
+                    // Belt and braces behind is_eog: a GGUF whose metadata
                     // omits its stop token would otherwise generate to the cap.
                     if piece.contains("<|im_end|>")
                         || piece.contains("<|endoftext|>")
@@ -801,7 +820,7 @@ mod inner {
                     // A reasoning block that has used its share is closed for
                     // the model, so the rest of the budget goes to the answer.
                     if guard.as_mut().is_some_and(|g| g.on_piece(&piece)) {
-                        let close = model.str_to_token(CLOSE_REASONING, AddBos::Never)?;
+                        let close = vocab.tokenize(CLOSE_REASONING.as_bytes(), false, true);
                         if n_cur + (close.len() as i32) < max_pos {
                             for token in close {
                                 sampler.accept(token);

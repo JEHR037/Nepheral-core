@@ -28,11 +28,11 @@ dirs-next = "2.0"
 sysinfo = "0.30"
 
 # Optional: local in-process inference
-llama-cpp-2 = { version = "0.1.157", optional = true }
+llama-cpp-2 = { version = "0.1.159", optional = true }
 # The same crate llama-cpp-2 already builds, named directly so the loader
 # can install a log callback and quote llama.cpp's own reason for refusing a
 # model, rather than this code carrying its own idea of what is supported.
-llama-cpp-sys-2 = { version = "0.1.157", optional = true }
+llama-cpp-sys-2 = { version = "0.1.159", optional = true }
 encoding_rs = { version = "0.8", optional = true }
 core-crypto = { path = "../core-crypto", optional = true }
 
