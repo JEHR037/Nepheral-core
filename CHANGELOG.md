@@ -9,6 +9,24 @@ moves to a version heading when that version is released.
 
 ## [Unreleased]
 
+### Added
+
+- RFC-0001, knowledge maps: packages of passages from openly licensed books
+  and documentation that a node searches before it answers. On a 28-question
+  test, a 4B model goes from 26 to 40 of 56 with the first map.
+- ADR-0019: maps are searched on the node that answers, installed from a
+  Maps panel, pinned by hash in each release, and ignored by the lottery.
+- ADR-0020: the licences accepted for map content, which add CC BY-SA, the
+  GFDL and the GPL for maps only. ADR-0018 is unchanged for everything else.
+- ADR-0021: inference contexts are reused and zeroed after every reply; only
+  the owner's local chat and local API keep a prefix cache between turns.
+
+### Changed
+
+- CONTRIBUTING.md states the licence rule for map content, and no longer
+  says the terms for outside contributions are pending: the Contributor
+  License Agreement has applied since 0.5.4.
+
 ## [0.5.4] - 2026-10-11
 
 First public release of the source code. Everything below is what this

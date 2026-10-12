@@ -110,3 +110,6 @@ and is never merged into the code.
 ## History
 
 - v1.0 (2026-10-10): Initial decision.
+- v1.1 (2026-10-12): The licences accepted for knowledge-map content, which
+  is distributed as separate works and not built in, are set by ADR-0020.
+  This list is unchanged for everything else.

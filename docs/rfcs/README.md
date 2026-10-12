@@ -71,4 +71,6 @@ What still needs an answer before a decision.
 
 ## Index
 
-No RFCs yet.
+| RFC | Title | Status | Decided in |
+|---|---|---|---|
+| [0001](0001-knowledge-maps.md) | Knowledge maps | Accepted | ADR-0019, ADR-0020 |

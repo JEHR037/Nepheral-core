@@ -81,6 +81,9 @@ history, or open a new ADR if the decision should change.
 | [0016](0016-light-clients-trust-the-chain.md) | Light clients trust the chain, not keys built into the app | Accepted |
 | [0017](0017-business-source-license.md) | Business Source License with conversion to Apache-2.0 | Accepted |
 | [0018](0018-dependency-licences.md) | Only dependencies whose licences fit the licence model | Accepted |
+| [0019](0019-knowledge-maps-on-the-answering-node.md) | Knowledge maps, searched on the node that answers | Accepted |
+| [0020](0020-licences-for-knowledge-map-content.md) | Licences for knowledge-map content | Accepted |
+| [0021](0021-reused-contexts-and-local-prefix-cache.md) | Reused inference contexts, zeroed between replies; a prefix cache only for the owner | Accepted |
 
 ADRs 0002 to 0016 were recorded retroactively for the first public release:
 the decisions were taken while the code was written, and each record
